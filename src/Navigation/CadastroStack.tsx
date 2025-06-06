@@ -5,6 +5,7 @@ import CadastroLocalizacao from "../Components/CadastroLocalizacao";
 import CadastroInterrupcao from "../Components/CadastroInterrupcao";
 import CadastroPrejuizos from "../Components/CadastroPrejuizos";
 import PanoramaGeral from "../Components/PanoramaGeral";
+import DetalhesEvento from "../Components/DetalhesEvento";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ const CadastroStack = () => {
       />
       <Stack.Screen name="CadastroPrejuizos" component={CadastroPrejuizos} />
       <Stack.Screen name="PanoramaGeral" component={PanoramaGeral} />
+      <Stack.Screen name="DetalhesEvento" component={DetalhesEvento} />
     </Stack.Navigator>
   );
 };

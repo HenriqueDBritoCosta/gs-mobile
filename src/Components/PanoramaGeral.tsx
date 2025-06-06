@@ -1,56 +1,71 @@
-import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { obterDuracao } from '../storage/tempoService'; // ajuste o caminho conforme sua estrutura
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { Evento } from "../types/Type";
+import { listarEventos } from "../storage/eventoService";
+import { useIsFocused } from "@react-navigation/native";
 
-type RootStack = {
-  Interrupcao: undefined;
-  PanoramaGeral: undefined;
-};
-
-const PanoramaGeral = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStack>>();
-  const [duracao, setDuracao] = useState<string | null>(null);
+export default function PanoramaGeral({ navigation }: any) {
+  const [eventos, setEventos] = useState<Evento[]>([]);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    const carregarDuracao = async () => {
-      const tempo = await obterDuracao();
-      setDuracao(tempo);
-    };
-    carregarDuracao();
-  }, []);
+    async function carregar() {
+      const dados = await listarEventos();
+      setEventos(dados.reverse());
+    }
+    carregar();
+  }, [isFocused]);
+
+  const renderItem = ({ item }: { item: Evento }) => (
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => navigation.navigate("DetalhesEvento", { evento: item })}
+    >
+      <Text style={styles.titulo}>{formatarData(item.dataRegistro)}</Text>
+      <Text>
+        {item.cidade} - {item.uf}
+      </Text>
+      <Text>Duração: {item.duracao}</Text>
+    </TouchableOpacity>
+  );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Panorama Geral</Text>
-
-      {duracao ? (
-        <Text style={styles.info}>⏱️ Tempo de interrupção: {duracao}</Text>
-      ) : (
-        <Text style={styles.info}>⏱️ Nenhuma duração registrada ainda</Text>
-      )}
+    <View style={{ flex: 1, padding: 16 }}>
+      <FlatList
+        data={eventos}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        ListEmptyComponent={<Text>Nenhum evento registrado.</Text>}
+      />
     </View>
   );
-};
+}
+
+function formatarData(dataIso: string) {
+  const data = new Date(dataIso);
+  return `${data.getDate().toString().padStart(2, "0")}/${(data.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}/${data.getFullYear()} - ${data
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${data.getMinutes().toString().padStart(2, "0")}`;
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
+  card: {
+    backgroundColor: "#eee",
+    padding: 12,
+    borderRadius: 6,
+    marginBottom: 10,
   },
   titulo: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  info: {
+    fontWeight: "bold",
     fontSize: 16,
-    marginTop: 8,
   },
 });
-
-export default PanoramaGeral;

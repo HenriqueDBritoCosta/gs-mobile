@@ -1,9 +1,9 @@
 type CEP = {
-    cep: string,
-  logradouro: string,
-  bairro: string,
-  localidade: string,
-  estado: string,
-} 
+  cep: string;
+  logradouro: string;
+  bairro: string;
+  localidade: string;
+  estado: string;
+};
 
-export default CEP
+export default CEP;

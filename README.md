@@ -1,8 +1,7 @@
 # Integrantes 
-NOME:                                           RM:     
-Adriano Lopes Sampaio Santana                     98574
-Henrique de Brito Costa                    	      98831 
-Rodrigo Aparecido Barbosa Lima                    98326  
+- Adriano Lopes Sampaio Santana - RM98574
+- Henrique de Brito Costa       - RM98831 
+- Rodrigo Aparecido Barbosa Lima - RM98326  
 
 # App Queda de Energia
 Aplicativo mobile criado com React Native + Expo para registrar, visualizar e analisar eventos de queda de energia elétrica, com foco em regiões afetadas por desastres naturais.
